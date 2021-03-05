@@ -6,7 +6,7 @@ uci commit luci
 
 #时区设置
 uci set system.@system[0].timezone=CST-8
-uci set system.@system[0].zonename=Asia/Shanghai
+uci set system.@system[0].zonename=Asia/Taipei
 uci commit system
 
 #SSRP
@@ -15,7 +15,6 @@ uci set shadowsocksr.@global[0].chnroute_url='https://cdn.jsdelivr.net/gh/QiuSim
 uci commit shadowsocksr
 
 #Feeds 更换镜像源
-sed -i 's,21.02,21.02-SNAPSHOT,g' /etc/opkg/distfeeds.conf
 sed -i 's,downloads.openwrt.org,mirror.sjtu.edu.cn/openwrt,g' /etc/opkg/distfeeds.conf
 
 #uhttpd 设置
