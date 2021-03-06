@@ -278,7 +278,7 @@ svn co https://github.com/sundaqiang/openwrt-packages/trunk/luci-app-services-wo
 sed -i 's/+docker/+docker \\\n\t+dockerd/g' ./feeds/luci/applications/luci-app-dockerman/Makefile
 
 # Extra drivers
-svn co https://github.com/suwus/openwrt-feeds-driver-ext/trunk/rtl8821cu package/new/rtl8821cu
+svn co https://github.com/suwus/openwrt-feeds-driver-ext/trunk/ package/rtlwifi
 
 ##最后的收尾工作
 #Lets Fuck
