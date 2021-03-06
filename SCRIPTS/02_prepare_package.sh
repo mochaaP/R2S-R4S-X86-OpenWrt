@@ -12,8 +12,8 @@ sed -i 's/Os/O3/g' include/target.mk
 #irqbalance
 sed -i 's/0/1/g' feeds/packages/utils/irqbalance/files/irqbalance.config
 #remove annoying snapshot tag
-sed -i 's,-SNAPSHOT,,g' include/version.mk
-sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
+#sed -i 's,-SNAPSHOT,,g' include/version.mk
+#sed -i 's,-SNAPSHOT,,g' package/base-files/image-config.in
 
 ##必要的patch
 wget -P target/linux/generic/pending-5.4 https://github.com/immortalwrt/immortalwrt/raw/master/target/linux/generic/hack-5.4/312-arm64-cpuinfo-Add-model-name-in-proc-cpuinfo-for-64bit-ta.patch
