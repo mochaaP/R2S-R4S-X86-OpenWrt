@@ -118,12 +118,12 @@ sed -i 's,default n,default y,g' feeds/packages/utils/coremark/Makefile
 #迅雷快鸟
 git clone --depth 1 https://github.com/garypang13/luci-app-xlnetacc.git package/lean/luci-app-xlnetacc
 #DDNS
-rm -rf ./feeds/packages/net/ddns-scripts
-rm -rf ./feeds/luci/applications/luci-app-ddns
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/ddns-scripts_aliyun package/lean/ddns-scripts_aliyun
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/ddns-scripts_dnspod package/lean/ddns-scripts_dnspod
-svn co https://github.com/openwrt/packages/branches/openwrt-18.06/net/ddns-scripts feeds/packages/net/ddns-scripts
-svn co https://github.com/openwrt/luci/branches/openwrt-18.06/applications/luci-app-ddns feeds/luci/applications/luci-app-ddns
+#rm -rf ./feeds/packages/net/ddns-scripts
+#rm -rf ./feeds/luci/applications/luci-app-ddns
+#svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/ddns-scripts_aliyun package/lean/ddns-scripts_aliyun
+#svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/ddns-scripts_dnspod package/lean/ddns-scripts_dnspod
+#svn co https://github.com/openwrt/packages/branches/openwrt-18.06/net/ddns-scripts feeds/packages/net/ddns-scripts
+#svn co https://github.com/openwrt/luci/branches/openwrt-18.06/applications/luci-app-ddns feeds/luci/applications/luci-app-ddns
 #Pandownload
 svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/lean/pandownload-fake-server package/lean/pandownload-fake-server
 #oled
@@ -244,26 +244,26 @@ svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/ipv6-helper packa
 #IPSEC
 svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-ipsec-vpnd package/lean/luci-app-ipsec-vpnd
 #Zerotier
-svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/lean/luci-app-zerotier package/lean/luci-app-zerotier
-cp -f ../PATCH/new/script/move_2_services.sh ./package/lean/luci-app-zerotier/move_2_services.sh
-pushd package/lean/luci-app-zerotier
-bash move_2_services.sh
-popd
-rm -rf ./feeds/packages/net/zerotier/files/etc/init.d/zerotier
+#svn co https://github.com/immortalwrt/immortalwrt/branches/master/package/lean/luci-app-zerotier package/lean/luci-app-zerotier
+#cp -f ../PATCH/new/script/move_2_services.sh ./package/lean/luci-app-zerotier/move_2_services.sh
+#pushd package/lean/luci-app-zerotier
+#bash move_2_services.sh
+#popd
+#rm -rf ./feeds/packages/net/zerotier/files/etc/init.d/zerotier
 #UPNP（回滚以解决某些沙雕设备的沙雕问题
-rm -rf ./feeds/packages/net/miniupnpd
-svn co https://github.com/coolsnowwolf/packages/trunk/net/miniupnpd feeds/packages/net/miniupnpd
+#rm -rf ./feeds/packages/net/miniupnpd
+#svn co https://github.com/coolsnowwolf/packages/trunk/net/miniupnpd feeds/packages/net/miniupnpd
 #KMS
 svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-vlmcsd package/lean/luci-app-vlmcsd
 svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/vlmcsd package/lean/vlmcsd
 #frp
-rm -rf ./feeds/luci/applications/luci-app-frps
-rm -rf ./feeds/luci/applications/luci-app-frpc
-rm -rf ./feeds/packages/net/frp
-rm -f ./package/feeds/packages/frp
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-frps package/lean/luci-app-frps
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-frpc package/lean/luci-app-frpc
-svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/frp package/lean/frp
+#rm -rf ./feeds/luci/applications/luci-app-frps
+#rm -rf ./feeds/luci/applications/luci-app-frpc
+#rm -rf ./feeds/packages/net/frp
+#rm -f ./package/feeds/packages/frp
+#svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-frps package/lean/luci-app-frps
+#svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/luci-app-frpc package/lean/luci-app-frpc
+#svn co https://github.com/coolsnowwolf/lede/trunk/package/lean/frp package/lean/frp
 #花生壳
 svn co https://github.com/teasiu/dragino2/trunk/package/teasiu/luci-app-phtunnel package/new/luci-app-phtunnel
 svn co https://github.com/QiuSimons/dragino2-teasiu/trunk/package/teasiu/luci-app-oray package/new/luci-app-oray
@@ -277,11 +277,14 @@ svn co https://github.com/sundaqiang/openwrt-packages/trunk/luci-app-services-wo
 #Docker
 sed -i 's/+docker/+docker \\\n\t+dockerd/g' ./feeds/luci/applications/luci-app-dockerman/Makefile
 
+# Extra drivers
+svn co https://github.com/suwus/openwrt-feeds-driver-ext/trunk/rtl8821cu package/new/rtl8821cu
+
 ##最后的收尾工作
 #Lets Fuck
-mkdir package/base-files/files/usr/bin
-cp -f ../PATCH/new/script/fuck package/base-files/files/usr/bin/fuck
-cp -f ../PATCH/new/script/chinadnslist package/base-files/files/usr/bin/chinadnslist
+#mkdir package/base-files/files/usr/bin
+#cp -f ../PATCH/new/script/fuck package/base-files/files/usr/bin/fuck
+#cp -f ../PATCH/new/script/chinadnslist package/base-files/files/usr/bin/chinadnslist
 #最大连接
 sed -i 's/16384/65536/g' package/kernel/linux/files/sysctl-nf-conntrack.conf
 #修改启动等待（可能无效）
