@@ -136,7 +136,7 @@ jobs:
       id: create_release
       uses: actions/create-release@main
       env:
-        GITHUB_TOKEN: ${{ secrets.workflow_token }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.assemble_artifact.outputs.release_tag }}
         release_name: 自动发布 ${{ steps.assemble_artifact.outputs.release_tag }}
