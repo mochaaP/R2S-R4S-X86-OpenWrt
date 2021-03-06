@@ -277,7 +277,7 @@ rm -rf ./feeds/luci/applications/luci-app-dockerman
 cp -rf ../openwrt-lienol/package/diy/luci-app-dockerman ./feeds/luci/applications/luci-app-dockerman
 
 # Extra drivers
-svn co https://github.com/suwus/openwrt-feeds-driver-ext/trunk/rtl8821cu package/new/rtl8821cu
+svn co https://github.com/suwus/openwrt-feeds-driver-ext/trunk/ package/rtlwifi
 
 ##最后的收尾工作
 #Lets Fuck
