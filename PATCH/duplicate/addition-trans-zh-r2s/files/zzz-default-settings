@@ -5,7 +5,7 @@ uci commit luci
 
 #timezone
 uci set system.@system[0].timezone=CST-8
-uci set system.@system[0].zonename=Asia/Shanghai
+uci set system.@system[0].zonename=Asia/Taipei
 uci commit system
 
 #ssrp
@@ -18,7 +18,7 @@ uci set system.@rngd[0].device="/dev/hwrng"
 uci commit system
 
 #feed
-sed -i 's,21.02,21.02-SNAPSHOT,g' /etc/opkg/distfeeds.conf
+#sed -i 's,21.02,21.02-SNAPSHOT,g' /etc/opkg/distfeeds.conf
 sed -i 's,downloads.openwrt.org,mirror.sjtu.edu.cn/openwrt,g' /etc/opkg/distfeeds.conf
 
 #uhttpd
@@ -70,8 +70,8 @@ sed -i 's,#USE_SOFTDRIVERS = 2,USE_SOFTDRIVERS = 1,g' /etc/ssl/openssl.cnf
 #echo "59.111.239.62 httpdns.n.netease.com" >> /etc/hosts && cat /etc/hosts | sort | uniq > /tmp/tmp_hosts && cat /tmp/tmp_hosts > /etc/hosts
 
 #chinalist
-echo "10 2 * * * chinadnslist &" >> /etc/crontabs/root && cat /etc/crontabs/root | sort | uniq > /tmp/tmp_cron_root && cat /tmp/tmp_cron_root > /etc/crontabs/root
-echo "20 2 * * * /usr/share/MosChinaDNS/update_list.sh &" >> /etc/crontabs/root && cat /etc/crontabs/root | sort | uniq > /tmp/tmp_cron2_root && cat /tmp/tmp_cron2_root > /etc/crontabs/root
+#echo "10 2 * * * chinadnslist &" >> /etc/crontabs/root && cat /etc/crontabs/root | sort | uniq > /tmp/tmp_cron_root && cat /tmp/tmp_cron_root > /etc/crontabs/root
+#echo "20 2 * * * /usr/share/MosChinaDNS/update_list.sh &" >> /etc/crontabs/root && cat /etc/crontabs/root | sort | uniq > /tmp/tmp_cron2_root && cat /tmp/tmp_cron2_root > /etc/crontabs/root
 
 #openclash
 echo "/etc/openclash/" >> /etc/sysupgrade.conf && cat /etc/sysupgrade.conf | sort | uniq > /tmp/tmp_sysupgrade_conf && cat /tmp/tmp_sysupgrade_conf > /etc/sysupgrade.conf
@@ -94,17 +94,17 @@ uci set network.globals.packet_steering='1'
 uci commit network
 
 #SSRP
-uci set shadowsocksr.@global[0].gfwlist_url='https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt'
-uci set shadowsocksr.@global[0].chnroute_url='https://cdn.jsdelivr.net/gh/QiuSimons/Chnroute@master/dist/chnroute/chnroute.txt'
-uci commit shadowsocksr
+#uci set shadowsocksr.@global[0].gfwlist_url='https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/gfw.txt'
+#uci set shadowsocksr.@global[0].chnroute_url='https://cdn.jsdelivr.net/gh/QiuSimons/Chnroute@master/dist/chnroute/chnroute.txt'
+#uci commit shadowsocksr
 
 ln -sf /sbin/ip /usr/bin/ip
 ln -sf /usr/bin/wget /usr/bin/wget-ssl
 
-opkg flag hold luci-app-ddns
-opkg flag hold luci-i18n-ddns-zh-cn
-opkg flag hold ddns-scripts
-opkg flag hold ddns-scripts_cloudflare.com-v4
+#opkg flag hold luci-app-ddns
+#opkg flag hold luci-i18n-ddns-zh-cn
+#opkg flag hold ddns-scripts
+#opkg flag hold ddns-scripts_cloudflare.com-v4
 opkg flag hold luci-app-firewall
 opkg flag hold firewall
 opkg flag hold dnsmasq-full
