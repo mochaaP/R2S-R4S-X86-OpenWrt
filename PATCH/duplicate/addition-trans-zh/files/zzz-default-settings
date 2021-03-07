@@ -5,7 +5,7 @@ uci commit luci
 
 #timezone
 uci set system.@system[0].timezone=CST-8
-uci set system.@system[0].zonename=Asia/Shanghai
+uci set system.@system[0].zonename=Asia/Taipei
 uci commit system
 
 #ssrp
@@ -18,7 +18,7 @@ uci commit system
 #uci commit system
 
 #feed
-sed -i 's,21.02,21.02-SNAPSHOT,g' /etc/opkg/distfeeds.conf
+#sed -i 's,21.02,21.02-SNAPSHOT,g' /etc/opkg/distfeeds.conf
 sed -i 's,downloads.openwrt.org,mirror.sjtu.edu.cn/openwrt,g' /etc/opkg/distfeeds.conf
 
 #uhttpd
@@ -79,10 +79,10 @@ uci commit shadowsocksr
 ln -sf /sbin/ip /usr/bin/ip
 ln -sf /usr/bin/wget /usr/bin/wget-ssl
 
-opkg flag hold luci-app-ddns
-opkg flag hold luci-i18n-ddns-zh-cn
-opkg flag hold ddns-scripts
-opkg flag hold ddns-scripts_cloudflare.com-v4
+#opkg flag hold luci-app-ddns
+#opkg flag hold luci-i18n-ddns-zh-cn
+#opkg flag hold ddns-scripts
+#opkg flag hold ddns-scripts_cloudflare.com-v4
 opkg flag hold luci-app-firewall
 opkg flag hold firewall
 opkg flag hold dnsmasq-full
