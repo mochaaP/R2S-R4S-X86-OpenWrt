@@ -1,8 +1,8 @@
 name: R2S-OpenWrt
 
 on:
-#  schedule:
-#    - cron: 5 6 * * 0
+  schedule:
+    - cron: 5 6 * * 0
   watch:
     types: started
 
@@ -87,12 +87,12 @@ jobs:
       run: |
         df -h
         cd openwrt
-        make download -j50
+        make download -j10
     - name: Make Toolchain
       run: |
         df -h
         cd openwrt
-        let make_process=$(nproc)+2
+        let make_process=$(nproc)+1
         make toolchain/install -j${make_process} V=s
     - name: Compile Openwrt
       id: compileopenwrt
@@ -100,7 +100,7 @@ jobs:
       run: |
         df -h
         cd openwrt
-        let Make_Process=$(nproc)+2
+        let Make_Process=$(nproc)+1
         make -j${Make_Process} V=w
         echo $?
     - name: If Error
@@ -122,24 +122,21 @@ jobs:
         gzip -d *.gz && exit 0
         gzip --best *.img
         ls -Ahl
-        sha256sum openwrt*r2s* | tee R2S-GC404-$(date +%Y-%m-%d)-21.02.sha256sum
-        zip R2S-GC404-$(date +%Y-%m-%d)-21.02-ext4.zip *r2s*ext4*
-        zip R2S-GC404-$(date +%Y-%m-%d)-21.02-sfs.zip *r2s*squashfs*
+        sha256sum *.img.gz | tee sha256sums
         ls -Ahl
     - name: Upload artifact
       uses: actions/upload-artifact@main
       with:
-        name: OpenWRT_21.02
+        name: Sysupgrade Images
         path: ./artifact/
 
     - name: Create release
       id: create_release
       uses: ncipollo/release-action@v1.8.0
       with:
-        name: OpenWRT-R2S-R4S-X86-21.02.0-RC1
+        name: OpenWrt 21.02 for rk3328
         allowUpdates: true
-        tag: 21.02.0-rc1
         commit: master
         replacesArtifacts: true
-        token: ${{ secrets.workflow_token }}
-        artifacts: ./artifact/*.zip
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: ./artifact/*.img.gz,./artifact/sha256sums
