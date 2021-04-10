@@ -49,7 +49,7 @@ jobs:
         df -h
     - name: Prepare Mixedwrt
       run: |
-        sudo chown -R runner:runner /home/runner/work/rk3328-dirty
+        sudo chown -R runner:runner /home/runner/work/openwrt-dirty
         cp -r ./SCRIPTS/R2S/. ./SCRIPTS/
         cp -r ./SCRIPTS/. ./
         /bin/bash 01_get_ready.sh
@@ -127,7 +127,6 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@main
       with:
-        name: Sysupgrade Images
         path: ./artifact/
 
     - name: Create release
@@ -136,7 +135,6 @@ jobs:
       with:
         name: OpenWrt 21.02 for rk3328
         allowUpdates: true
-        commit: master
         replacesArtifacts: true
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: ./artifact/*.img.gz,./artifact/sha256sums
