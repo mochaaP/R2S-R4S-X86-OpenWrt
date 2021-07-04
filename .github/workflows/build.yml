@@ -1,0 +1,117 @@
+name: Build
+
+on:
+  schedule:
+    - cron: 5 6 * * 0
+  watch:
+    types: started
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - name: Free up disk space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+        root-reserve-mb: 2048
+    - name: Show system info
+      uses: mochaaP/neofetch-action@master
+    - name: Checkout
+      uses: actions/checkout@main
+    - name: Initialize dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
+      run: |
+        sudo -E rm -rf /etc/apt/sources.list.d
+        sudo -E apt-get update -y
+        sudo -E apt-get install -y build-essential rsync asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core p7zip p7zip-full msmtp libssl-dev texinfo libreadline-dev libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint ccache curl wget vim nano python3 python3-pip python3-ply haveged lrzsz device-tree-compiler scons
+        wget -qO - https://raw.githubusercontent.com/friendlyarm/build-env-on-ubuntu-bionic/master/install.sh | sed 's/python-/python3-/g' | /bin/bash
+        sudo -E apt-get clean -y
+        git config --global user.name 'GitHub Actions' && git config --global user.email 'noreply@github.com'
+        df -h
+    - name: Prepare workspace
+      run: |
+        sudo chown -R runner:runner .
+        cp -r ./SCRIPTS/R2S/. ./SCRIPTS/
+        cp -r ./SCRIPTS/. ./
+        /bin/bash 01_get_ready.sh
+        cd openwrt
+        cp -r ../SCRIPTS/. ./
+        /bin/bash 02_prepare_package.sh
+        /bin/bash 02_target_only.sh
+        /bin/bash 03_convert_translation.sh
+        /bin/bash 05_create_acl_for_luci.sh -a
+        mv ../SEED/R2S/config.seed .config
+        make defconfig
+    - name: Permission fix
+      run: |
+        chmod_filter=$(mktemp)
+        echo '/\.git' >  ${chmod_filter}
+        echo '/\.svn' >> ${chmod_filter}
+        find ./ -maxdepth 1 | grep -v '\./$' | grep -v '/\.git' | xargs -s1024 chmod -R u=rwX,og=rX
+        find ./ -type f | grep -v -f ${chmod_filter} | xargs -s1024 file | grep 'executable\|ELF' | cut -d ':' -f1 | xargs -s1024 chmod 755
+        rm -f ${chmod_filter}
+        unset chmod_filter
+    - name: Download packages
+      run: |
+        df -h
+        cd openwrt
+        make download -j10
+    - name: Make toolchain
+      run: |
+        df -h
+        cd openwrt
+        let threads=$(nproc)+1
+        make toolchain/install -j${threads} V=s
+    - name: Compile
+      id: compile
+      continue-on-error: true
+      run: |
+        df -h
+        cd openwrt
+        let threads=$(nproc)+1
+        make -j${threads} V=w
+        echo $?
+    - name: Handle failure
+      if: steps.compile.outcome == 'failure'
+      run: |
+        cat openwrt/.config
+        echo '🚨 Compile failed, restarting with verbose output:'
+        cd openwrt && make -j1 V=s
+    - name: Disk space
+      run: df -h
+    - name: Prepare artifacts
+      run: |
+        rm -rf ./artifact/
+        mkdir -p ./artifact/
+        mv openwrt/bin/targets/rockchip/armv8/*sysupgrade.img* ./artifact/
+        cd ./artifact/
+        gzip -d *.gz && exit 0
+        gzip --best *.img
+        sha256sum *.img.gz | tee sha256sums
+        ls -Ahl
+    - name: Upload artifact
+      uses: actions/upload-artifact@main
+      with:
+        path: ./artifact/
+    - name: Create release
+      uses: ncipollo/release-action@v1.8.0
+      if: contains(github.ref, 'tags')
+      with:
+        name: OpenWrt 21.02 for rk3328
+        allowUpdates: true
+        replacesArtifacts: true
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: ./artifact/*.img.gz,./artifact/sha256sums
+    - name: Markdown autodocs
+      uses: dineshsonachalam/markdown-autodocs@v1.0.2
+      with:
+        commit_author: mochaaP Bot <git-bot@mochaa.ws>
+        commit_user_email: git-bot@mochaa.ws
+        commit_message: 'chore(docs): update artificats'

@@ -1,0 +1,20 @@
+name: Debug with tmate
+on: workflow_dispatch
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Free up disk space
+      uses: easimon/maximize-build-space@master
+      with:
+        remove-dotnet: 'true'
+        remove-android: 'true'
+        remove-haskell: 'true'
+    - name: Show system info
+      uses: mochaaP/neofetch-action@master
+    - name: Checkout
+      uses: actions/checkout@main
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      if: github.event.repository.owner.id == github.event.sender.id
+
