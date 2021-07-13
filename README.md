@@ -11,4 +11,5 @@ Based on `openwrt-21.02`, with minimal fixes from dirty forks, plus some extra p
 ![CI builds](https://img.shields.io/github/workflow/status/mochaaP/openwrt-dirty/Build?label=CI&logo=githubactions&style=for-the-badge&logoColor=white)
 
 <!-- MARKDOWN-AUTO-DOCS:START (WORKFLOW_ARTIFACT_TABLE) -->
+
 <!-- MARKDOWN-AUTO-DOCS:END -->
